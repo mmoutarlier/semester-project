@@ -58,7 +58,6 @@ python scripts/data_preproc/clevrer_video2frames.py
 ```
 
 ## Requirements
-- **Python 3.x**
 - The exact dependencies are listed in the notebook. Use `pip install` to install the necessary libraries.
 
 ## Getting Started
