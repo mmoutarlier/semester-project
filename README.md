@@ -130,7 +130,7 @@ Log in to **wandb** for logging:
 wandb login
 ```
 
-### To train SlotFormer on OBJ3D
+### Object-centric model on OBJ3D
 
 1. Pre-train SAVi on OBJ3D videos:
 ```bash
@@ -158,7 +158,7 @@ Alternatively, use the pre-trained model:
 python slotformer/video_prediction/test_vp.py --params slotformer/video_prediction/configs/slotformer_obj3d_params.py --weight $WEIGHT
 ```
 
-### To train SlotFormer on CLEVRER
+### Object-centric model on CLEVRER
 
 1. Pre-train SAVi on CLEVRER videos:
 ```bash
