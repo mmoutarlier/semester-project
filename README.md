@@ -1,217 +1,200 @@
 # Unsupervised Object Discovery and Dynamics Prediction
 
 ## Overview
-This project evaluates the effects of different approaches for unsupervised object discovery and dynamics prediction. Leveraging datasets representing videos of objects, the study focuses on discovering object representations, understanding their interactions, and predicting their future states.
-
-The methodology centers around SlotFormer, a Transformer-based model designed to predict object dynamics from video clips by breaking scenes into objects and modeling their temporal interactions.
+This project evaluates various approaches for unsupervised object discovery and dynamics prediction using video datasets. The primary focus is on discovering object representations, understanding their interactions, and predicting their future states. The methodology uses SlotFormer, a Transformer-based model that learns object dynamics from video clips by decomposing scenes into objects and modeling their temporal interactions.
 
 ## Features
-- **Object Discovery: Savi Model**: Exploration of unsupervised techniques for detecting objects in dynamic scenes.
-- **Dynamics Prediction: SlotFormer Model**: Prediction of future object states based on learned temporal interactions.
-
+- **Object Discovery (Savi Model)**: Exploration of unsupervised techniques for detecting objects in dynamic scenes.
+- **Dynamics Prediction (SlotFormer Model)**: Prediction of future object states based on learned temporal interactions.
 
 ## Contents
 The notebook includes:
-1. **Motivation**: Explaining the significance of unsupervised learning in object detection and dynamics prediction.
-2. **Background on SlotFormer**: Detailed description of the model and its capabilities.
-3. **Experiments**: Evaluations using datasets with video clips, with a focus on:
+1. **Motivation**: Discussing the importance of unsupervised learning in object detection and dynamics prediction.
+2. **Background on SlotFormer**: Detailed description of the SlotFormer model and its capabilities.
+3. **Experiments**: Evaluations based on video clip datasets, focusing on:
    - Object discovery performance.
    - Dynamics prediction accuracy.
 
+## Dataset & Checkpoints
+To use the checkpoints and datasets, follow these steps:
 
-## To load the checkpoints : 
+### To load the checkpoints:
+Download the following from the Google Drive link:  
+[Checkpoint and Log Files](https://drive.google.com/drive/folders/1XdpecT6CsHtgXxovH20Blvl7UAwO5sUS?usp=share_link)
 
-Go on https://drive.google.com/drive/folders/1XdpecT6CsHtgXxovH20Blvl7UAwO5sUS?usp=share_link
-and download /logs for original SA and ISA for the slot attention and invariant slot attention 
-and /checkpoints for Slot Former
+- **/logs**: Contains the original SA and ISA files for Slot Attention and Invariant Slot Attention.
+- **/checkpoints**: Contains the SlotFormer model checkpoints.
 
+### To load the datasets:
+Download the relevant datasets and store them on your machine. Use the following commands:
 
-## To load the datasets : 
-Download the relevent datasets and store them somewhere on your machine, using the following commands:
-
-### Tetrominoes dataset: 
+#### Tetrominoes dataset:
+```bash
 wget https://storage.googleapis.com/multi-object-datasets/tetrominoes/tetrominoes_train.tfrecords
+```
 
-
-### CLEVR dataset:
+#### CLEVR dataset:
+```bash
 wget https://storage.googleapis.com/multi-object-datasets/clevr_with_masks/clevr_with_masks_train.tfrecords
+```
 
-Then in the \slot code, modify the invariant_slot_attention/lib/input_pipeline.py files by replacing the datasets' PATH_ variables with the actual path of the data on your disk.
+After downloading, modify the `PATH_` variables in the `invariant_slot_attention/lib/input_pipeline.py` file to point to the local paths of the datasets.
 
-### OBJ3D dataset:
+#### OBJ3D dataset:
+This dataset is from G-SWM. Download it manually from [this link](https://drive.google.com/file/d/1XSLW3qBtcxxvV-5oiRruVTlDlQ_Yatzm/view) and place it in the `\data\OBJ3D` folder.
 
-This dataset is adopted from G-SWM. You can download it manually from the Google drive : https://drive.google.com/file/d/1XSLW3qBtcxxvV-5oiRruVTlDlQ_Yatzm/view. Once downloaded, put it in the \data\OBJ3D.
+Since the OBJ3D videos are already extracted to frames, no additional processing is required.
 
-Since the videos in OBJ3D are already extracted to frames, we don't need to further process them.
+#### CLEVRER dataset:
+Download CLEVRER from the official website: [CLEVRER Dataset](http://clevrer.csail.mit.edu).  
+Ensure you download the following files:
+- Training and Validation Videos
+- Annotations for all tasks
+- Object Masks and Attributes for video prediction tasks
 
-### CLEVRER dataset:
-Please download CLEVRER from the official website : http://clevrer.csail.mit.edu
-
-We will need Training Videos, Annotations, Validation Videos, Annotations for all tasks
-If you want to experiment on the video prediction task, please download Object Masks and Attributes as we will evaluate the quality of the predicted object masks and bboxes.
-To accelerate training, we can extract videos to frames in advance. Please run python scripts/data_preproc/clevrer_video2frames.py. You can modify a few parameters in that file.
-
+To accelerate training, you can convert videos to frames in advance by running:
+```bash
+python scripts/data_preproc/clevrer_video2frames.py
+```
 
 ## Requirements
 - **Python 3.x**
-- Libraries: The exact dependencies will be listed in the notebook itself. Ensure you have the required packages installed by checking the notebook or using `pip install`.
+- The exact dependencies are listed in the notebook. Use `pip install` to install the necessary libraries.
 
 ## Getting Started
 
 1. Clone the repository and open the Jupyter notebook.
-2. Follow the instructions in the notebook to:
+2. Follow the instructions to:
    - Load datasets
-   - Train or evaluate the SlotFormer model.
-   - Visualize results.
+   - Train or evaluate the SlotFormer model
+   - Visualize results
 
+## Comparing Invariant and Slot Attention
 
-## To run the comparaison of invariant and slot attention: 
+To compare Invariant and Slot Attention, follow these steps:
 
-To run the comparaison of invariant and slot attention in the /slot folder: 
+1. Create or activate a new Python virtual environment (tested with Python 3.11.8).
+2. Update the `PATH_` variables in the `invariant_slot_attention/lib/input_pipeline.py` file to point to the correct paths.
+3. Adjust configuration settings (e.g., batch size) in the `invariant_slot_attention/configs/<dataset>/<equiv_...>.py` files.
+   - For Tetrominoes: Use the default configuration on an RTX 3090.
+   - For CLEVR: Set batch size to 32 on RTX 3090.
+4. Run the comparison script:
+```bash
+/slot/phd-google-code/slot_test1.sh
+```
+Modify the Python script to run the desired experiment.
 
-1. Create and/or activate a new Python virtual environment (tested with 3.11.8).
+## Running SlotFormer
 
-2. Modify the invariant_slot_attention/lib/input_pipeline.py files by replacing the datasets' PATH_ variables with the actual path on your disk.
+### Installation:
 
-3. Modify the mode and training configurations (especially batch_size) if required, by changing the invariant_slot_attention/configs/<dataset>/<equiv_...>.py files.
+Use **conda** to set up the environment:
 
-For Tetrominoes, the default configuration can be used on RTX 3090.
-For CLEVR, the batch_size must be set to 32 on RTX 3090.
-
-4. From this repository's root, run the /slot/phd-google-code/slot_test1.sh, modify the python according to what you want to run
-
-
-## To run the Slot former
-
-### Install :
-
-We recommend using conda for environment setup:
-
+```bash
 conda create -n slotformer python=3.8.8
 conda activate slotformer
+```
 
-Then install PyTorch which is compatible with your cuda setting. In our experiments, we use PyTorch 1.10.1 and CUDA 11.3:
+Install PyTorch compatible with your CUDA setup (e.g., PyTorch 1.10.1, CUDA 11.3):
 
+```bash
 conda install pytorch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 cudatoolkit=11.3 -c pytorch -c conda-forge
-The codebase heavily relies on nerv for project template and Trainer. You can easily install it by:
+```
 
+Install the **nerv** project template:
+
+```bash
 git clone git@github.com:Wuziyi616/nerv.git
 cd nerv
 git checkout v0.1.0  # tested with v0.1.0 release
 pip install -e .
-This will automatically install packages necessary for the project. Additional packages are listed as follows:
+```
 
-pip install pycocotools scikit-image lpips
-pip install einops==0.3.2  # tested on 0.3.2, other versions might also work
-pip install phyre==0.2.2  # please use the v0.2.2, since the task split might slightly differs between versions
-Finally, clone and install this project by:
+Then, install additional dependencies:
 
-cd ..  # move out from nerv/
+```bash
+pip install pycocotools scikit-image lpips einops==0.3.2 phyre==0.2.2
+```
+
+Finally, clone and install this project:
+
+```bash
+cd ..  # move out of nerv/
 git clone git@github.com:pairlab/SlotFormer.git
 cd SlotFormer
 pip install -e .
-We use wandb for logging, please run wandb login to log in.
+```
 
+Log in to **wandb** for logging:
 
-### To train slot former on OBJ3D :
+```bash
+wandb login
+```
 
-We experiment on video prediction task in this dataset.
+### To train SlotFormer on OBJ3D
 
-Pre-train SAVi on OBJ3D videos
+1. Pre-train SAVi on OBJ3D videos:
+```bash
+python scripts/train.py --task base_slots --params slotformer/base_slots/configs/savi_obj3d_params.py --fp16 --ddp --cudnn
+```
+Alternatively, use the pre-trained model:  
+`pretrained/savi_obj3d_params/model_40.pth`
 
-Run the following command to train SAVi on OBJ3D videos. Please launch 3 runs and select the best model weight.
+2. Extract slots from OBJ3D videos:
+```bash
+python slotformer/base_slots/extract_slots.py --params slotformer/base_slots/configs/savi_obj3d_params.py --weight $WEIGHT --save_path $SAVE_PATH
+```
 
-python scripts/train.py --task base_slots \
-    --params slotformer/base_slots/configs/savi_obj3d_params.py \
-    --fp16 --ddp --cudnn
-Alternatively, we provide pre-trained SAVi weight as pretrained/savi_obj3d_params/model_40.pth.
+### Video Prediction on OBJ3D
 
-Then, we'll need to extract slots and save them. Please use extract_slots.py and run:
+1. Train SlotFormer on extracted OBJ3D slots:
+```bash
+python scripts/train.py --task video_prediction --params slotformer/video_prediction/configs/slotformer_obj3d_params.py --fp16 --ddp --cudnn
+```
+Alternatively, use the pre-trained model:  
+`pretrained/slotformer_obj3d_params/model_200.pth`
 
-python slotformer/base_slots/extract_slots.py \
-    --params slotformer/base_slots/configs/savi_obj3d_params.py \
-    --weight $WEIGHT \
-    --save_path $SAVE_PATH (e.g. './data/OBJ3D/slots.pkl')
-This will extract slots from OBJ3D videos, and save them into a .pkl file (~692M).
+2. Evaluate video prediction:
+```bash
+python slotformer/video_prediction/test_vp.py --params slotformer/video_prediction/configs/slotformer_obj3d_params.py --weight $WEIGHT
+```
 
-Alternatively, we also provide pre-computed slots as described in benchmark.md.
+### To train SlotFormer on CLEVRER
 
-Video prediction
+1. Pre-train SAVi on CLEVRER videos:
+```bash
+python scripts/train.py --task base_slots --params slotformer/base_slots/configs/stosavi_clevrer_params.py --fp16 --ddp --cudnn
+```
+Alternatively, use the pre-trained model:  
+`pretrained/stosavi_clevrer_params/model_12.pth`
 
-For the video prediction task, we train SlotFormer over slots, and then evaluate the generated frames' visual quality.
+2. Extract slots from CLEVRER videos:
+```bash
+python slotformer/base_slots/extract_slots.py --params slotformer/base_slots/configs/stosavi_clevrer_params.py --weight $WEIGHT --save_path $SAVE_PATH
+```
 
-Train SlotFormer on OBJ3D slots
+### Video Prediction on CLEVRER
 
-Train a SlotFormer model on extracted slots by running:
+1. Train SlotFormer on CLEVRER slots:
+```bash
+python scripts/train.py --task video_prediction --params slotformer/video_prediction/configs/slotformer_clevrer_params.py --fp16 --ddp --cudnn
+```
+Alternatively, use the pre-trained model:  
+`pretrained/slotformer_clevrer_params/model_80.pth`
 
-python scripts/train.py --task video_prediction \
-    --params slotformer/video_prediction/configs/slotformer_obj3d_params.py \
-    --fp16 --ddp --cudnn
-Alternatively, we provide pre-trained SlotFormer weight as pretrained/slotformer_obj3d_params/model_200.pth.
-
-Evaluate SlotFormer in video prediction
-
-To evaluate the video prediction task, please use test_vp.py and run:
-
-python slotformer/video_prediction/test_vp.py \
-    --params slotformer/video_prediction/configs/slotformer_obj3d_params.py \
-    --weight $WEIGHT
-This will compute and print all the metrics. Besides, it will also save 10 videos for visualization under vis/obj3d/$PARAMS/. If you only want to do visualizations (i.e. not testing the metrics), simply use the --save_num args and set it to a positive value.
-
-
-
-### To train slot former on CLEVRER
-
-We experiment on video prediction and VQA task in this dataset.
-
-Pre-train SAVi on CLEVRER videos
-
-Run the following command to train SAVi on CLEVRER videos. Please launch 3 runs and select the best model weight.
-
-python scripts/train.py --task base_slots \
-    --params slotformer/base_slots/configs/stosavi_clevrer_params.py \
-    --fp16 --ddp --cudnn
-Alternatively, we provide pre-trained SAVi weight as pretrained/stosavi_clevrer_params/model_12.pth.
-
-Then, we'll need to extract slots and save them. Please use extract_slots.py and run:
-
-python slotformer/base_slots/extract_slots.py \
-    --params slotformer/base_slots/configs/stosavi_clevrer_params.py \
-    --weight $WEIGHT \
-    --save_path $SAVE_PATH (e.g. './data/CLEVRER/slots.pkl')
-This will extract slots from CLEVRER videos, and save them into a .pkl file (~13G).
-
-Alternatively, we also provide pre-computed slots as described in benchmark.md.
-
-Video prediction
-
-For the video prediction task, we train SlotFormer over slots, and then evaluate the generated frames' visual quality, and object trajectories (mask/bbox).
-
-Train SlotFormer on CLEVRER slots
-
-Train a SlotFormer model on extracted slots by running:
-
-python scripts/train.py --task video_prediction \
-    --params slotformer/video_prediction/configs/slotformer_clevrer_params.py \
-    --fp16 --ddp --cudnn
-Alternatively, we provide pre-trained SlotFormer weight as pretrained/slotformer_clevrer_params/model_80.pth.
-
-Evaluate video prediction results
-
-To evaluate the video prediction task, please use test_vp.py and run:
-
-python slotformer/video_prediction/test_vp.py \
-    --params slotformer/video_prediction/configs/slotformer_clevrer_params.py \
-    --weight $WEIGHT
-This will compute and print all the metrics. Besides, it will also save 10 videos for visualization under vis/clevrer/$PARAMS/. If you only want to do visualizations (i.e. not testing the metrics), simply use the --save_num args and set it to a positive value.
+2. Evaluate video prediction:
+```bash
+python slotformer/video_prediction/test_vp.py --params slotformer/video_prediction/configs/slotformer_clevrer_params.py --weight $WEIGHT
+```
 
 ## Results
-The project aims to showcase:
-- Improved object discovery metrics in an unsupervised setting.
-- Accurate predictions of object dynamics using SlotFormer.
+This project demonstrates:
+- Improved object discovery performance in unsupervised settings.
+- Accurate object dynamics predictions using SlotFormer.
 
-## Reference
-https://github.com/google-research/slot-attention-video
-https://github.com/pairlab/SlotFormer/tree/master
+## References
+- [Slot Attention Video](https://github.com/google-research/slot-attention-video)
+- [SlotFormer](https://github.com/pairlab/SlotFormer/tree/master)
 
-Special thanks to researchers and contributors who developed SlotFormer and the datasets used in this analysis.
+Special thanks to the researchers and contributors of SlotFormer and the datasets used in this analysis.
+
