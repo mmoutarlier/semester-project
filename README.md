@@ -1,4 +1,3 @@
-# semester-project
 # Unsupervised Object Discovery and Dynamics Prediction
 
 ## Overview
@@ -28,26 +27,24 @@ and /checkpoints for Slot Former
 
 
 ## To load the datasets : 
+Download the relevent datasets and store them somewhere on your machine, using the following commands:
 
-- Tetraminoes Download the relevent datasets and store them somewhere on your machine, using the following commands:
-
-# Tetrominoes dataset: 
+### Tetrominoes dataset: 
 wget https://storage.googleapis.com/multi-object-datasets/tetrominoes/tetrominoes_train.tfrecords
 
 
-- CLEVR
-# CLEVR dataset:
+### CLEVR dataset:
 wget https://storage.googleapis.com/multi-object-datasets/clevr_with_masks/clevr_with_masks_train.tfrecords
 
 Then in the \slot code, modify the invariant_slot_attention/lib/input_pipeline.py files by replacing the datasets' PATH_ variables with the actual path of the data on your disk.
 
-- OBJ3D
+### OBJ3D dataset:
 
 This dataset is adopted from G-SWM. You can download it manually from the Google drive : https://drive.google.com/file/d/1XSLW3qBtcxxvV-5oiRruVTlDlQ_Yatzm/view. Once downloaded, put it in the \data\OBJ3D.
 
 Since the videos in OBJ3D are already extracted to frames, we don't need to further process them.
 
-- CLEVRER
+### CLEVRER dataset:
 Please download CLEVRER from the official website : http://clevrer.csail.mit.edu
 
 We will need Training Videos, Annotations, Validation Videos, Annotations for all tasks
